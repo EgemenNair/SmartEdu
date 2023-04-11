@@ -6,8 +6,22 @@ dotenv.config();
 const app: Express = express();
 const port = 3000 || process.env.PORT;
 
+// Template Engine
+app.set("view engine", "ejs");
+
+// Middlewares
+app.use(express.static("public"));
+
+// Routes
 app.get("/", (req: Request, res: Response) => {
-  res.status(200).send("Index Page");
+  res.status(200).render("index", {
+    page_name: "index",
+  });
+});
+app.get("/about", (req: Request, res: Response) => {
+  res.status(200).render("about", {
+    page_name: "about",
+  });
 });
 
 app.listen(port, () => {
