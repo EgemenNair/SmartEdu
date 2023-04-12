@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import * as pageRoute from "./routes/pageRoute";
 import * as courseRoute from "./routes/courseRoute";
 import * as categoryRoute from "./routes/categoryRoute";
+import * as authRoute from "./routes/authRoute";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use(express.urlencoded({ extended: true })); // for parsing
 app.use("/", pageRoute.router);
 app.use("/courses", courseRoute.router);
 app.use("/categories", categoryRoute.router);
+app.use("/users", authRoute.router);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
