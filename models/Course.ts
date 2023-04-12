@@ -1,6 +1,17 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 const Schema = mongoose.Schema;
+
+interface ICourse {
+  name: string;
+  description: string;
+  createdAt: Date;
+  lecturer: string;
+  photo: string;
+  slug?: string;
+  category?: mongoose.Types.ObjectId;
+}
 
 const CourseSchema = new Schema({
   name: {
@@ -24,12 +35,25 @@ const CourseSchema = new Schema({
     type: String,
     required: true,
   },
+  slug: {
+    type: String,
+    unique: true,
+  },
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
+  },
 });
 
-export const Course: mongoose.Model<{
-  name: string;
-  description: string;
-  createdAt: Date;
-  lecturer: string;
-  photo: string;
-}> = mongoose.model("Course", CourseSchema);
+CourseSchema.pre("validate", function (next) {
+  this.slug = slugify(this.name, {
+    lower: true,
+    strict: true,
+  });
+  next();
+});
+
+export const Course: mongoose.Model<ICourse> = mongoose.model(
+  "Course",
+  CourseSchema
+);

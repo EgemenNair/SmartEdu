@@ -1,9 +1,10 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 import * as pageRoute from "./routes/pageRoute";
 import * as courseRoute from "./routes/courseRoute";
+import * as categoryRoute from "./routes/categoryRoute";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: true })); // for parsing
 // Routes
 app.use("/", pageRoute.router);
 app.use("/courses", courseRoute.router);
+app.use("/categories", categoryRoute.router);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
