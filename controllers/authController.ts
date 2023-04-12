@@ -27,7 +27,7 @@ export const logUser = async (req: Request, res: Response) => {
     }
     // USER SESSION
     req.session.userID = user.id;
-    res.status(200).redirect("/");
+    res.status(200).redirect("/users/dashboard");
   } catch (error) {
     res.status(500).json({
       message: "Something went wrong",
@@ -39,5 +39,13 @@ export const logUser = async (req: Request, res: Response) => {
 export const logoutUser = async (req: Request, res: Response) => {
   req.session.destroy(() => {
     res.redirect("/");
+  });
+};
+
+export const getDashboardPage = async (req: Request, res: Response) => {
+  const user = await User.findOne({ _id: req.session.userID });
+  res.status(200).render("dashboard", {
+    page_name: "dashboard",
+    user,
   });
 };
