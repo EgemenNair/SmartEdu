@@ -44,8 +44,10 @@ export const getAllCourses = async (req: Request, res: Response) => {
 export const getCourse = async (req: Request, res: Response) => {
   try {
     const course = await Course.findOne({ slug: req.params.slug });
+    const categories = await Category.find();
     res.status(200).render("course", {
       course,
+      categories,
       page_name: "courses",
     });
   } catch (error) {

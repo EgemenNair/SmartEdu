@@ -1,6 +1,7 @@
-import express, { Express } from "express";
+import express, { Express, NextFunction } from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import session from "express-session";
 
 import * as pageRoute from "./routes/pageRoute";
 import * as courseRoute from "./routes/courseRoute";
@@ -20,12 +21,26 @@ mongoose.connect("mongodb://localhost/smartedu-db").then(() => {
 // Template Engine
 app.set("view engine", "ejs");
 
+// Global Variable
+let userIN: string | null | undefined = null;
+
 // Middlewares
 app.use(express.static("public"));
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing
-
+app.use(
+  session({
+    secret: "my_keyboard_cat",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 // Routes
+app.use("*", (req, res, next) => {
+  userIN = req.session.userID;
+  res.locals.userIN = userIN;
+  next();
+});
 app.use("/", pageRoute.router);
 app.use("/courses", courseRoute.router);
 app.use("/categories", categoryRoute.router);

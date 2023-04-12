@@ -1,14 +1,12 @@
 import { Request, Response } from "express";
-import { User, IUser } from "../models/User";
+import session from "express-session";
+import { User } from "../models/User";
 import bcrypt from "bcrypt";
 
 export const createUser = async (req: Request, res: Response) => {
   try {
     const user = await User.create(req.body);
-    res.status(201).json({
-      status: "success",
-      user,
-    });
+    res.status(201).redirect("/login");
   } catch (error) {
     res.status(400).json({
       status: "bad request",
@@ -27,7 +25,9 @@ export const getUser = async (req: Request, res: Response) => {
     if (!same) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    res.status(200).send("YOU ARE LOGGED IN!");
+    // USER SESSION
+    req.session.userID = user.id;
+    res.status(200).redirect("/");
   } catch (error) {
     res.status(500).json({
       message: "Something went wrong",

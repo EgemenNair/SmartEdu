@@ -1,6 +1,7 @@
-import { Express, Request, Response } from "express";
+import { Request, Response } from "express";
 
 export const getIndexPage = (req: Request, res: Response) => {
+  console.log(req.session.userID);
   res.status(200).render("index", {
     page_name: "index",
   });
