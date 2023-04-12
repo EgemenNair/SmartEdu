@@ -1,6 +1,8 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 
+import * as pageRoute from "./routes/pageRoute";
+
 dotenv.config();
 
 const app: Express = express();
@@ -13,16 +15,7 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 
 // Routes
-app.get("/", (req: Request, res: Response) => {
-  res.status(200).render("index", {
-    page_name: "index",
-  });
-});
-app.get("/about", (req: Request, res: Response) => {
-  res.status(200).render("about", {
-    page_name: "about",
-  });
-});
+app.use("/", pageRoute.router);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
