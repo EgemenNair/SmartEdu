@@ -14,7 +14,7 @@ export const createUser = async (req: Request, res: Response) => {
     });
   }
 };
-export const getUser = async (req: Request, res: Response) => {
+export const logUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -34,4 +34,10 @@ export const getUser = async (req: Request, res: Response) => {
       error,
     });
   }
+};
+
+export const logoutUser = async (req: Request, res: Response) => {
+  req.session.destroy(() => {
+    res.redirect("/");
+  });
 };
