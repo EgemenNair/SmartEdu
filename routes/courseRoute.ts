@@ -4,3 +4,4 @@ import * as courseController from "../controllers/courseController";
 export const router = express.Router();
 
 router.route("/").post(courseController.createCourse);
+router.route("/").get(courseController.getAllCourses);
