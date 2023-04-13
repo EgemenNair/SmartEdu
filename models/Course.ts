@@ -7,7 +7,7 @@ interface ICourse {
   name: string;
   description: string;
   createdAt: Date;
-  lecturer: string;
+  lecturer: mongoose.Schema.Types.ObjectId;
   slug?: string;
   category?: mongoose.Types.ObjectId;
 }
@@ -26,8 +26,9 @@ const CourseSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  lecturer: {
-    type: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
   slug: {
@@ -40,7 +41,7 @@ const CourseSchema = new Schema({
   },
 });
 
-CourseSchema.pre("validate", function (next) {
+CourseSchema.pre<ICourse>("validate", function (next) {
   this.slug = slugify(this.name, {
     lower: true,
     strict: true,
@@ -48,7 +49,7 @@ CourseSchema.pre("validate", function (next) {
   next();
 });
 
-export const Course: mongoose.Model<ICourse> = mongoose.model(
+export const Course: mongoose.Model<ICourse> = mongoose.model<ICourse>(
   "Course",
   CourseSchema
 );
