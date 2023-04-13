@@ -13,6 +13,12 @@ export const getAboutPage = (req: Request, res: Response) => {
   });
 };
 
+export const getContactPage = (req: Request, res: Response) => {
+  res.status(200).render("contact", {
+    page_name: "contact",
+  });
+};
+
 export const getRegisterPage = (req: Request, res: Response) => {
   res.status(200).render("register", {
     page_name: "register",

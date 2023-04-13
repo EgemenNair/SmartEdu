@@ -7,6 +7,7 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
+  role: "student" | "lecturer" | "admin";
 }
 
 const UserSchema = new Schema({
@@ -23,11 +24,16 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    enum: ["student", "lecturer", "admin"],
+    default: "student",
+  },
 });
 
 UserSchema.pre("save", function (next: Function) {
   const user = this;
-  bcrypt.hash(user.password, 10, (error, hash) => {
+  bcrypt.hash(user.password, 12, (error, hash) => {
     user.password = hash;
     next();
   });

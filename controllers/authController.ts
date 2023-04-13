@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 export const createUser = async (req: Request, res: Response) => {
   try {
     const user = await User.create(req.body);
+    console.log(user);
     res.status(201).redirect("/login");
   } catch (error) {
     res.status(400).json({
