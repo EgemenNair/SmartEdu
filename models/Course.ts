@@ -8,7 +8,6 @@ interface ICourse {
   description: string;
   createdAt: Date;
   lecturer: string;
-  photo: string;
   slug?: string;
   category?: mongoose.Types.ObjectId;
 }
@@ -28,10 +27,6 @@ const CourseSchema = new Schema({
     default: Date.now,
   },
   lecturer: {
-    type: String,
-    required: true,
-  },
-  photo: {
     type: String,
     required: true,
   },

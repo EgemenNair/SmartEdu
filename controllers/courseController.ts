@@ -5,10 +5,7 @@ import { Category } from "../models/Category";
 export const createCourse = async (req: Request, res: Response) => {
   try {
     const course = await Course.create(req.body);
-    res.status(201).json({
-      status: "success",
-      course,
-    });
+    res.status(201).redirect("/courses");
   } catch (error) {
     res.status(400).json({
       status: "bad request",
@@ -26,7 +23,7 @@ export const getAllCourses = async (req: Request, res: Response) => {
       filter = { category: category?._id };
     }
 
-    const courses = await Course.find(filter);
+    const courses = await Course.find(filter).sort("name");
     const categories = await Category.find();
 
     res.status(200).render("courses", {

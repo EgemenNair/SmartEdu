@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import session from "express-session";
-import { User } from "../models/User";
 import bcrypt from "bcrypt";
+import { User } from "../models/User";
+import { Category } from "../models/Category";
 
 export const createUser = async (req: Request, res: Response) => {
   try {
     const user = await User.create(req.body);
-    console.log(user);
     res.status(201).redirect("/login");
   } catch (error) {
     res.status(400).json({
@@ -45,8 +45,10 @@ export const logoutUser = async (req: Request, res: Response) => {
 
 export const getDashboardPage = async (req: Request, res: Response) => {
   const user = await User.findOne({ _id: req.session.userID });
+  const categories = await Category.find();
   res.status(200).render("dashboard", {
     page_name: "dashboard",
     user,
+    categories,
   });
 };
