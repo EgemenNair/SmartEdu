@@ -1,6 +1,8 @@
 import { Express, Request, Response } from "express";
 import { Course } from "../models/Course";
 import { Category } from "../models/Category";
+import { User } from "../models/User";
+import { ObjectId } from "mongoose";
 
 export const createCourse = async (req: Request, res: Response) => {
   try {
@@ -10,7 +12,7 @@ export const createCourse = async (req: Request, res: Response) => {
       category: req.body.category,
       user: req.session.userID,
     });
-    res.status(201).redirect("/courses");
+    res.status(201).redirect("/users/dashboard");
   } catch (error) {
     res.status(400).json({
       status: "bad request",
@@ -59,5 +61,23 @@ export const getCourse = async (req: Request, res: Response) => {
       status: "bad request",
       error,
     });
+  }
+};
+export const enrollCourse = async (req: Request, res: Response) => {
+  const user = await User.findById(req.session.userID);
+  const alreadyEnrolled = user?.courses.includes(req.body.course_id);
+  if (!alreadyEnrolled && user?.role === "student") {
+    try {
+      await user?.courses.push(req.body.course_id);
+      await user?.save();
+      res.status(200).redirect("/users/dashboard");
+    } catch (error) {
+      res.status(400).json({
+        status: "bad request",
+        error,
+      });
+    }
+  } else {
+    res.redirect("/users/dashboard");
   }
 };

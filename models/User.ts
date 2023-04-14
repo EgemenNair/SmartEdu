@@ -8,6 +8,7 @@ export interface IUser {
   email: string;
   password: string;
   role: "student" | "lecturer" | "admin";
+  courses: mongoose.Schema.Types.ObjectId[];
 }
 
 const UserSchema = new Schema({
@@ -29,9 +30,15 @@ const UserSchema = new Schema({
     enum: ["student", "lecturer", "admin"],
     default: "student",
   },
+  courses: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+    },
+  ],
 });
 
-UserSchema.pre("save", function (next: Function) {
+UserSchema.pre<IUser>("save", function (next: Function) {
   const user = this;
   bcrypt.hash(user.password, 12, (error, hash) => {
     user.password = hash;
@@ -39,4 +46,7 @@ UserSchema.pre("save", function (next: Function) {
   });
 });
 
-export const User: mongoose.Model<IUser> = mongoose.model("User", UserSchema);
+export const User: mongoose.Model<IUser> = mongoose.model<IUser>(
+  "User",
+  UserSchema
+);
