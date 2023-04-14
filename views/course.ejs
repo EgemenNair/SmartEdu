@@ -15,19 +15,37 @@
             <img src="/images/blog_single.jpg" alt="" class="img-fluid">
           </div>
           <div class="post-content">
-            <div class="post-date">
+            <div class="post-date pb-5">
+              <% if (user && (user.role === "student" && !user.courses.includes(course._id))) { %>
               <form method="POST" action="/courses/enroll">
                 <button class="btn btn-lg btn-warning text-white"><span>Enroll Course !</span></button>
                 <input type="hidden" name="course_id" value="<%= course._id %>">
               </form>
+              <% } %>
+              <% if (user && (user.role === "student" && user.courses.includes(course._id))) { %>
+                <form method="POST" action="/courses/drop">
+                  <button class="btn btn-lg btn-block btn-danger text-white"><span>Drop Course</span></button>
+                  <input type="hidden" name="course_id" value="<%= course._id %>">
+                </form>
+                <% } %>
+              <% if ( user && (user.role === "admin" || (user.role === "lecturer" && user.courses.includes(course._id) || JSON.stringify(course.user._id) === JSON.stringify(user._id)))) { %>
+              <form method="POST" action="/course/<%= course.slug %>/delete">
+                <button class="btn btn-lg btn-block btn-danger text-white"><span>Delete Course</span></button>
+                <input type="hidden" name="course_id" value="<%= course._id %>">
+              </form>
+              <form method="POST" action="/course/<%= course.slug %>/edit">
+                <button class="btn btn-lg btn-block btn-warning text-white"><span>Edit Course</span></button>
+                <input type="hidden" name="course_id" value="<%= course._id %>">
+              </form>
+              <% } %>
             </div>
             <div class="meta-info-blog">
               <span><i class="fa fa-calendar"></i> <a href="#"><%= course.createdAt %></a> </span>
-            </div> 
+            </div>
             <div class="blog-title">
               <h2><a href="#" title=""><%= course.name %></a></h2>
             </div>
-            <div class="blog-desc">
+            <div class="blog-desc mt-5">
               <blockquote class="default">
                 <%= course.description %>
               </blockquote>
@@ -75,9 +93,9 @@
 
 <%- include('partials/_footer.ejs'); %>
 <!-- ALL JS FILES -->
-<script src="js/all.js"></script>
+<script src="/js/all.js"></script>
 <!-- ALL PLUGINS -->
-<script src="js/custom.js"></script>
+<script src="/js/custom.js"></script>
 
 </body>
 

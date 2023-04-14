@@ -22,6 +22,7 @@ export const createCourse = async (req: Request, res: Response) => {
 };
 export const getAllCourses = async (req: Request, res: Response) => {
   try {
+    const user = await User.findById(req.session.userID);
     const categorySlug = req.query.categories;
     const category = await Category.findOne({ slug: categorySlug });
 
@@ -35,6 +36,7 @@ export const getAllCourses = async (req: Request, res: Response) => {
 
     res.status(200).render("courses", {
       courses,
+      user,
       categories,
       page_name: "courses",
     });
@@ -47,6 +49,7 @@ export const getAllCourses = async (req: Request, res: Response) => {
 };
 export const getCourse = async (req: Request, res: Response) => {
   try {
+    const user = await User.findById(req.session.userID);
     const course = await Course.findOne({ slug: req.params.slug }).populate(
       "user"
     );
@@ -54,6 +57,7 @@ export const getCourse = async (req: Request, res: Response) => {
     res.status(200).render("course", {
       course,
       categories,
+      user,
       page_name: "courses",
     });
   } catch (error) {
@@ -67,6 +71,66 @@ export const enrollCourse = async (req: Request, res: Response) => {
   const user = await User.findById(req.session.userID);
   const alreadyEnrolled = user?.courses.includes(req.body.course_id);
   if (!alreadyEnrolled && user?.role === "student") {
+    try {
+      await user?.courses.push(req.body.course_id);
+      await user?.save();
+      res.status(200).redirect("/users/dashboard");
+    } catch (error) {
+      res.status(400).json({
+        status: "bad request",
+        error,
+      });
+    }
+  } else {
+    res.redirect("/users/dashboard");
+  }
+};
+
+export const dropCourse = async (req: Request, res: Response) => {
+  const user = await User.findById(req.session.userID);
+  const alreadyEnrolled = user?.courses.includes(req.body.course_id);
+  if (alreadyEnrolled && user?.role === "student") {
+    try {
+      await User.updateOne(
+        { _id: user._id },
+        { $pull: { courses: req.body.course_id } }
+      );
+      await user.save();
+      res.status(200).redirect("/users/dashboard");
+    } catch (error) {
+      res.status(400).json({
+        status: "bad request",
+        error,
+      });
+    }
+  } else {
+    res.redirect("/users/dashboard");
+  }
+};
+
+export const deleteCourse = async (req: Request, res: Response) => {
+  const user = await User.findById(req.session.userID);
+  const alreadyEnrolled = user?.courses.includes(req.body.course_id);
+  if (alreadyEnrolled && user?.role === "student") {
+    try {
+      await user?.courses.push(req.body.course_id);
+      await user?.save();
+      res.status(200).redirect("/users/dashboard");
+    } catch (error) {
+      res.status(400).json({
+        status: "bad request",
+        error,
+      });
+    }
+  } else {
+    res.redirect("/users/dashboard");
+  }
+};
+
+export const editCourse = async (req: Request, res: Response) => {
+  const user = await User.findById(req.session.userID);
+  const alreadyEnrolled = user?.courses.includes(req.body.course_id);
+  if (alreadyEnrolled && user?.role === "student") {
     try {
       await user?.courses.push(req.body.course_id);
       await user?.save();

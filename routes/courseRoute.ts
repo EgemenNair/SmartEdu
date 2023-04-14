@@ -10,3 +10,6 @@ router
 router.route("/").get(courseController.getAllCourses);
 router.route("/:slug").get(courseController.getCourse);
 router.route("/enroll").post(courseController.enrollCourse);
+router.route("/drop").post(courseController.dropCourse);
+router.route("/:slug/delete").post(courseController.deleteCourse);
+router.route("/:slug/edit").post(courseController.editCourse);
