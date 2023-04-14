@@ -1,8 +1,8 @@
-import { Express, Request, Response } from "express";
+import { Request, Response } from "express";
 import { Course } from "../models/Course";
 import { Category } from "../models/Category";
 import { User } from "../models/User";
-import { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 
 export const createCourse = async (req: Request, res: Response) => {
   try {
@@ -24,14 +24,37 @@ export const getAllCourses = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.session.userID);
     const categorySlug = req.query.categories;
+    const query = req.query.search?.toLocaleString();
     const category = await Category.findOne({ slug: categorySlug });
 
-    let filter = {};
+    interface IFilter {
+      name?: String;
+      category?: mongoose.Types.ObjectId | null;
+    }
+
+    let filter: IFilter = {};
+
     if (categorySlug) {
       filter = { category: category?._id };
     }
 
-    const courses = await Course.find(filter).populate("user").sort("name");
+    if (query) {
+      filter = { name: query };
+    }
+
+    if (!query && !categorySlug) {
+      filter.name = "";
+      filter.category = null;
+    }
+
+    const courses = await Course.find({
+      $or: [
+        { name: { $regex: ".*" + filter.name + ".*", $options: "i" } },
+        { category: filter.category },
+      ],
+    })
+      .populate("user")
+      .sort("name");
     const categories = await Category.find();
 
     res.status(200).render("courses", {
