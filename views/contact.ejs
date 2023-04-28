@@ -17,11 +17,15 @@
       <div class="col-xl-12 col-md-12 col-sm-12">
 
         <% if (flashMessage) { %>
-          <% if (flashMessage.success) { %>
-            <div class="alert alert-success">
-              <%= flashMessage.success %>
-            </div>
-          <% } %>
+        <% if (flashMessage.success) { %>
+        <div class="alert alert-success">
+          <%= flashMessage.success %>
+        </div>
+        <% } else if (flashMessage.error)  { %>
+        <div class="alert alert-danger">
+          <%= flashMessage.error %>
+        </div>
+        <% } %>
         <% } %>
 
         <div class="contact_form">

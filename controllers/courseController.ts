@@ -12,12 +12,11 @@ export const createCourse = async (req: Request, res: Response) => {
       category: req.body.category,
       user: req.session.userID,
     });
+    req.flash("success", `${course.name} course created successfully !`);
     res.status(201).redirect("/users/dashboard");
   } catch (error) {
-    res.status(400).json({
-      status: "bad request",
-      error,
-    });
+    req.flash("error", `Something went wrong... Course was not created !`);
+    res.status(400).redirect("/users/dashboard");
   }
 };
 export const getAllCourses = async (req: Request, res: Response) => {

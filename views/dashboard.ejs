@@ -64,10 +64,24 @@
         <div class="blog-author">
           <div class="author-bio">
             <h3 class="author_name"><a href="#">Courses From: <%= user.name %></a></h3>
-
           </div>
-
         </div><!-- end col -->
+        <% if (flashMessage) { %>
+        <div class="row mt-5">
+          <div class="col-lg-12 text-center">
+            <% if (flashMessage.success) { %>
+            <div class="alert alert-success">
+              <%= flashMessage.success %>
+            </div>
+            <% } else if (flashMessage.error)  { %>
+            <div class="alert alert-danger">
+              <%= flashMessage.error %>
+            </div>
+            <% } %>
+          </div>
+        </div>
+        <% } %>
+
       </div><!-- end row -->
       <div class="row mt-5">
         <% for( let i = 0; i < courses.length; i++ ) { %>
