@@ -15,6 +15,15 @@
 
     <div class="row">
       <div class="col-xl-12 col-md-12 col-sm-12">
+
+        <% if (flashMessage) { %>
+          <% if (flashMessage.success) { %>
+            <div class="alert alert-success">
+              <%= flashMessage.success %>
+            </div>
+          <% } %>
+        <% } %>
+
         <div class="contact_form">
           <div id="message"></div>
           <form id="contactform" class="" action="/contact" name="contactform" method="POST">

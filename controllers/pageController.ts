@@ -45,14 +45,21 @@ export const sendEmail = async (req: Request, res: Response) => {
     </ul>
   `;
 
+  // Generate test SMTP service account from ethereal.email
+  // Only needed if you don't have a real mail account for testing
+  let testAccount = {
+    user: "pythonmail35@gmail.com",
+    pass: "jmcpszsyfbxanxak",
+  };
+
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
-      user: "egemen@gmaill.com", // gmaill user
-      pass: "pass", // gmaill password
+      user: testAccount.user, // gmaill user
+      pass: testAccount.pass, // gmaill password
     },
   });
 
@@ -71,5 +78,6 @@ export const sendEmail = async (req: Request, res: Response) => {
   // Preview only available when sending through an Ethereal account
   // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+  req.flash("success", "We recceived your message successfully !");
   res.redirect("/contact");
 };
