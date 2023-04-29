@@ -31,23 +31,23 @@
                 </ul>
                 <div class=" text-center mt-3">
                   <% if (user && user.role === "student" && !user.courses.includes(courses[i]._id)) { %>
-                  <form method="POST" action="/courses/enroll">
+                  <form novalidate method="POST" action="/courses/enroll">
                     <button class="btn btn-lg btn-block btn-warning text-white"><span>Enroll Course !</span></button>
                     <input type="hidden" name="course_id" value="<%= courses[i]._id %>">
                   </form>
                   <% } %>
                   <% if (user && user.role === "student" && user.courses.includes(courses[i]._id)) { %>
-                    <form method="POST" action="/courses/drop">
+                    <form novalidate method="POST" action="/courses/drop">
                       <button class="btn btn-lg btn-block btn-danger text-white"><span>Drop Course</span></button>
                       <input type="hidden" name="course_id" value="<%= courses[i]._id %>">
                     </form>
                     <% } %>
                   <% if ( user && (user.role === "admin" || (user.role === "lecturer" && user.courses.includes(courses[i]._id) || JSON.stringify(courses[i].user._id) === JSON.stringify(user._id)))) { %>
-                  <form method="POST" action="/course/<%= courses[i].slug %>/delete">
+                  <form novalidate method="POST" action="/course/<%= courses[i].slug %>/delete">
                     <button class="btn btn-lg btn-block btn-danger text-white"><span>Delete Course</span></button>
                     <input type="hidden" name="course_id" value="<%= courses[i]._id %>">
                   </form>
-                  <form method="POST" action="/course/<%= courses[i].slug %>/edit">
+                  <form novalidate method="POST" action="/course/<%= courses[i].slug %>/edit">
                     <button class="btn btn-lg btn-block btn-warning text-white"><span>Edit Course</span></button>
                     <input type="hidden" name="course_id" value="<%= courses[i]._id %>">
                   </form>
@@ -64,7 +64,7 @@
       <div class="col-lg-3 col-12 right-single">
         <div class="widget-search">
           <div class="site-search-area">
-            <form method="GET" id="site-searchform" action="#">
+            <form novalidate method="GET" id="site-searchform" action="#">
               <div>
                 <input class="input-text form-control" name="search" id="search-k" placeholder="Search..." type="text">
                 <button id="searchsubmit" value="search" type="submit"></button>

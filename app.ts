@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import flash from "connect-flash";
+import { body, validationResult } from "express-validator";
 
 import * as pageRoute from "./routes/pageRoute";
 import * as courseRoute from "./routes/courseRoute";
