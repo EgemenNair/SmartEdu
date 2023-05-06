@@ -19,4 +19,4 @@ This project is made with;
 - Node.js
 - TypeScript
 
-Deployment: https://smartedu-production.up.railway.app/users/dashboard
+Deployment: https://smartedu-production.up.railway.app/
