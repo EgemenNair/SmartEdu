@@ -14,12 +14,16 @@ import * as authRoute from "./routes/authRoute";
 dotenv.config();
 
 const app: Express = express();
-const port = 3000 || process.env.PORT;
+const port = process.env.PORT || 5000;
 
 // Connect to DB
-mongoose.connect("mongodb://localhost/smartedu-db").then(() => {
-  console.log(`⚡️[server]: DB connected at mongodb://localhost/smartedu-db`);
-});
+mongoose
+  .connect(
+    "mongodb+srv://nairegemen:MmrzhNwGByTR124q@smartedu.3il686j.mongodb.net/"
+  )
+  .then(() => {
+    console.log(`⚡️[server]: DB connected at mongodb://localhost/smartedu-db`);
+  });
 
 // Template Engine
 app.set("view engine", "ejs");
@@ -36,7 +40,10 @@ app.use(
     secret: "my_keyboard_cat",
     resave: false,
     saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: "mongodb://localhost/smartedu-db" }),
+    store: MongoStore.create({
+      mongoUrl:
+        "mongodb+srv://nairegemen:MmrzhNwGByTR124q@smartedu.3il686j.mongodb.net/",
+    }),
   })
 );
 app.use(flash());
