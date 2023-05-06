@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import flash from "connect-flash";
-import { body, validationResult } from "express-validator";
+import methodOverride from "method-override";
 
 import * as pageRoute from "./routes/pageRoute";
 import * as courseRoute from "./routes/courseRoute";
@@ -44,6 +44,11 @@ app.use((req, res, next) => {
   res.locals.flashMessage = req.flash();
   next();
 });
+app.use(
+  methodOverride("_method", {
+    methods: ["POST", "GET"],
+  })
+);
 
 // Routes
 app.use("*", (req, res, next) => {

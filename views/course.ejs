@@ -29,11 +29,11 @@
               </form>
               <% } %>
               <% if ( user && (user.role === "admin" || (user.role === "lecturer" && user.courses.includes(course._id) || JSON.stringify(course.user._id) === JSON.stringify(user._id)))) { %>
-              <form novalidate method="POST" action="/course/<%= course.slug %>/delete">
-                <button class="btn btn-lg btn-block btn-danger text-white"><span>Delete Course</span></button>
+              <form novalidate method="POST" action="/courses/<%= course.slug %>?_method=DELETE">
+                <button onclick="return confirm('Are you sure ?')" class="btn btn-lg btn-block btn-danger text-white"><span>Delete Course</span></button>
                 <input type="hidden" name="course_id" value="<%= course._id %>">
               </form>
-              <form novalidate method="POST" action="/course/<%= course.slug %>/edit">
+              <form novalidate method="POST" action="/courses/<%= course.slug %>/edit">
                 <button class="btn btn-lg btn-block btn-warning text-white"><span>Edit Course</span></button>
                 <input type="hidden" name="course_id" value="<%= course._id %>">
               </form>
