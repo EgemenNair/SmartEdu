@@ -4,14 +4,21 @@ import { Category } from "../models/Category";
 export const createCategory = async (req: Request, res: Response) => {
   try {
     const category = await Category.create(req.body);
-    res.status(201).json({
-      status: "success",
-      category,
-    });
+    req.flash("success", "Category created successfully");
+    res.status(201).redirect("/users/dashboard");
   } catch (error) {
-    res.status(400).json({
-      status: "bad request",
-      error,
-    });
+    req.flash("error", `Category wasn't created successfully: ${error}`);
+    res.status(400).redirect("/users/dashboard");
+  }
+};
+
+export const deleteCategory = async (req: Request, res: Response) => {
+  try {
+    await Category.findByIdAndRemove(req.params.id);
+    req.flash("success", "Category deleted successfully");
+    res.status(200).redirect("/users/dashboard");
+  } catch (error) {
+    req.flash("error", `Couldn't delete category: ${error}`);
+    res.status(400).redirect("/users/dashboard");
   }
 };

@@ -1,9 +1,18 @@
 import { Request, Response } from "express";
 import nodemailer from "nodemailer";
+import { Course } from "../models/Course";
+import { User } from "../models/User";
 
-export const getIndexPage = (req: Request, res: Response) => {
+export const getIndexPage = async (req: Request, res: Response) => {
+  const totalCourses = await Course.find().countDocuments();
+  const totalStudents = await User.find().countDocuments({ role: "student" });
+  const totalLecturers = await User.find().countDocuments({ role: "lecturer" });
+
   res.status(200).render("index", {
     page_name: "index",
+    totalCourses,
+    totalLecturers,
+    totalStudents,
   });
 };
 
