@@ -144,20 +144,18 @@ export const deleteCourse = async (req: Request, res: Response) => {
 };
 
 export const editCourse = async (req: Request, res: Response) => {
-  const user = await User.findById(req.session.userID);
-  const alreadyEnrolled = user?.courses.includes(req.body.course_id);
-  if (alreadyEnrolled && user?.role === "student") {
-    try {
-      await user?.courses.push(req.body.course_id);
-      await user?.save();
-      res.status(200).redirect("/users/dashboard");
-    } catch (error) {
-      res.status(400).json({
-        status: "bad request",
-        error,
-      });
+  try {
+    const course = await Course.findOne({ slug: req.params.slug });
+    if (course) {
+      course.name = req.body.name;
+      course.description = req.body.description;
+      course.category = req.body.category;
+      course.save();
     }
-  } else {
-    res.redirect("/users/dashboard");
+    req.flash("success", `${course?.name} was edited successfully !`);
+    res.status(200).redirect("/users/dashboard");
+  } catch (error) {
+    req.flash("error", `Course was not edited successfully: ${error}`);
+    res.status(400).redirect("/users/dashboard");
   }
 };

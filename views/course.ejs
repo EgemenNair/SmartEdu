@@ -33,10 +33,61 @@
                 <button onclick="return confirm('Are you sure ?')" class="btn btn-lg btn-block btn-danger text-white"><span>Delete Course</span></button>
                 <input type="hidden" name="course_id" value="<%= course._id %>">
               </form>
-              <form novalidate method="POST" action="/courses/<%= course.slug %>/edit">
-                <button class="btn btn-lg btn-block btn-warning text-white"><span>Edit Course</span></button>
+              <div>
+                <button class="btn btn-lg btn-block btn-warning text-white"
+                data-toggle="modal" data-target="#editCourse<%= course._id %>"><span>Edit Course</span></button>
                 <input type="hidden" name="course_id" value="<%= course._id %>">
-              </form>
+              </div>
+              <!-- Edit Modal -->
+              <div class="modal fade" id="editCourse<%= course._id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-body customer-box">
+                      <!-- Tab panes -->
+                      <div class="tab-content">
+                        <div class="tab-pane active" id="Login">
+                          <form novalidate method="POST" action="/courses/<%= course.slug %>?_method=PUT" class="form-horizontal">
+                            <div class="form-group">
+                              <div class="col-sm-12">
+                                <input type="text" name="name" class="form-control" placeholder="<%= course.name %>" value="<%= course.name %>">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-sm-12">
+                                <input type="hidden" name="role" class="form-control" value="<%= user.role %>">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-sm-12">
+                                <textarea rows="8" name="description" class="form-control" placeholder="<%= course.description %>"><%= course.description %></textarea>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-sm-12">
+                                <select class="form-control" name="category" placeholder="<%= course.category %>" value="<%= course.category %>">
+                                  <% for( let i = 0; i < categories.length; i++ ) { %>
+                                  <option value="<%= categories[i]._id %>"><%= categories[i].name %></option>
+                                  <% } %>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-10">
+                                <button type="submit" class="btn btn-light btn-radius btn-brd grd1">
+                                  Submit
+                                </button>
+                                <button type="submit" class="btn btn-light btn-radius btn-brd grd1" data-dismiss="modal" aria-hidden="true">
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <% } %>
             </div>
             <div class="meta-info-blog">
